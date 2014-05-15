@@ -1,0 +1,55 @@
+Capital Bikeshare in DC
+========================================================
+# Sept. - Dec. 2010
+
+### Dependencies:
+### Options: Analysis cached
+```{r setoptions, echo=FALSE}
+opts_chunk$set(echo = FALSE, cache=TRUE)
+```
+
+## Load the data
+```{r load}
+setwd("/Users/jeffreyli/Desktop/Bikes/Source")
+
+data <- read.csv("../Data/2010-4th-quarter-done.csv")
+data$date <- as.Date(data$date,format='%m/%d/%Y')
+data$weekdays <- weekdays(data$date)
+data$month <- as.factor(as.numeric(format(data$date, "%m")))
+data$year <- as.factor(as.numeric(format(data$date, "%Y")))
+data["weekend"] <- grepl("Sunday|Saturday", data$weekdays)
+
+```
+
+## Here's a summary of the data:
+
+```{r summary, echo=TRUE}
+summary(data)
+```
+
+## Relating bike station hits to month and weekday vs. weekend:
+
+```{r fig.width=7, fig.height=6, echo=TRUE}
+fit <- lm(count ~ weekend + month, data=data)
+summary(fit) # show results
+
+```
+
+## Plot Relationships
+```{r, echo=TRUE}
+plot(data$weekend, data$count,
+        main = "Station Hits vs. Weekday/Weekend",
+        xlab = "Weekday (1) or Weekend(2)",
+        ylab = "Number of Station Hits")
+abline(fit[1], fit$weekendTRUE)
+
+plot(data$month, data$count,
+        main = "Station Hits vs. Month",
+        xlab = "Month",
+        ylab = "Number of Station Hits")
+```
+
+<iframe src="https://mapsengine.google.com/map/embed?mid=zBlpnPnIr12s.k-xTvWnNNEQg" width="800" height="480"></iframe>
+
+Thanks!  
+Jeff
