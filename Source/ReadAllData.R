@@ -85,7 +85,7 @@ files <- list.files(path="../Data", pattern="*quarter.csv", full.names=T, recurs
 ## (1) Iterative version
 ptm <- proc.time()
 i = 0
-for (file in files[1:3]) {
+for (file in files) {
   i <- i+1
   if (i == 1){
     dataset <- cleanData(file)
@@ -133,7 +133,7 @@ print(summary(dataset))
 fit <- lm(visits ~ weekend + month, data=dataset)
 print(summary(fit)) # show results
 
-meanDailyVisits <- aggregate(dataset$visits, by=list(stationName=dataset$stationName, stationID=dataset$stationID), FUN=mean)
+meanDailyVisits <- aggregate(dataset$visit, by=list(stationName=dataset$stationName, stationID=dataset$stationID), FUN=mean)
 meanDailyVisits <- rename(meanDailyVisits, c("x"="visits"))
 latlon <- read.csv("../Locations2.csv")
 merged <- merge(latlon, meanDailyVisits)
